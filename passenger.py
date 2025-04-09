@@ -14,6 +14,20 @@ class Person:
 
         print(f"PERSON SPAWN: Person created at floor {start} -> {dest}")
     
+    def should_board(self, current_floor):
+        return self.start_floor == current_floor and self.pickup_time is None
+    
+    def should_exit(self, current_floor):
+        return self.dest_floor == current_floor and self.dropoff_time is None
+    
+    def board(self, sim_time):
+        self.pickup_time = sim_time
+        print(f"PASSENGER {self.id} BOARDED: at floor {self.start_floor}")
+
+    def exit(self, sim_time):
+        self.dropoff_time = sim_time
+        print(f"PASSENGER {self.id} EXITED: at floor {self.dest_floor}")
+
     def wait_time(self):
         return self.pickup_time - self.spawn_time if self.pickup_time is not None else None
     
