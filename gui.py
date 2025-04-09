@@ -36,7 +36,13 @@ class ElevatorGUI:
 
         for idx, elevator in enumerate(self.sim.elevators):
             label = self.elevator_state_labels[idx]
-            label.config(text=f"Elevator {elevator.id} - State: {elevator.state}, Floor: {elevator.current_floor}, Riders: {len(elevator.riders)}")
+            label.config(
+                text=(
+                    f"Elevator {elevator.id} - State: {elevator.state}, "
+                    f"Floor: {elevator.current_floor}, Riders: {len(elevator.riders)}, "
+                    f"Tasks: {len(elevator.tasks)}"
+                )
+            )
 
         self.draw_shaft()
 
@@ -52,10 +58,24 @@ class ElevatorGUI:
             self.canvas.create_line(0, y, self.canvas_width, y, fill="gray")
             self.canvas.create_text(20, y - self.floor_height / 2, text=f"Floor {i}", anchor="w")
 
+        # Draw people waiting
+        for person in self.sim.controller.pending_requests:
+            y = self.canvas_height - person.start_floor * self.floor_height - self.floor_height / 2
+            self.canvas.create_oval(5, y - 5, 15, y + 5, fill="orange")
+            self.canvas.create_text(10, y, text="P", fill="black", font=("Helvetica", 6))
+
+        # Draw elevators
         for elevator in self.sim.elevators:
             elev_y = self.canvas_height - (elevator.current_floor * self.floor_height)
             elev_top = elev_y - self.floor_height
             elev_bottom = elev_y
             x_offset = 40 + elevator.id * 60
-            self.canvas.create_rectangle(x_offset, elev_top, x_offset + 40, elev_bottom, fill="blue")
-            self.canvas.create_text(x_offset + 20, (elev_top + elev_bottom) / 2, text=str(len(elevator.riders)), fill="white", font=("Helvetica", 16))
+
+            color = {
+                "MOVING": "lightblue",
+                "LOADING": "green",
+                "IDLE": "gray"
+            }.get(elevator.state, "blue")
+
+        self.canvas.create_rectangle(x_offset, elev_top, x_offset + 40, elev_bottom, fill=color)
+        self.canvas.create_text(x_offset + 20, (elev_top + elev_bottom) / 2, text=str(len(elevator.riders)), fill="white", font=("Helvetica", 16))
