@@ -31,7 +31,6 @@ class ElevatorGUI:
     def update_gui(self):
         sim_continues = self.sim.step()
 
-        # Update GUI elements
         self.sim_time_label.config(text=f"Sim Time: {self.sim.sim_time:.2f} min")
 
         for idx, elevator in enumerate(self.sim.elevators):
@@ -58,13 +57,11 @@ class ElevatorGUI:
             self.canvas.create_line(0, y, self.canvas_width, y, fill="gray")
             self.canvas.create_text(20, y - self.floor_height / 2, text=f"Floor {i}", anchor="w")
 
-        # Draw people waiting
         for person in self.sim.controller.pending_requests:
             y = self.canvas_height - person.start_floor * self.floor_height - self.floor_height / 2
             self.canvas.create_oval(5, y - 5, 15, y + 5, fill="orange")
             self.canvas.create_text(10, y, text="P", fill="black", font=("Helvetica", 6))
 
-        # Draw elevators
         for elevator in self.sim.elevators:
             elev_y = self.canvas_height - (elevator.current_floor * self.floor_height)
             elev_top = elev_y - self.floor_height
