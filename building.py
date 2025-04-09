@@ -2,7 +2,7 @@ from config import *
 from passenger import *
 from elevator import *
 from controller import *
-from statistics import *
+from stats import *
 from gui import *
 
 class Building:

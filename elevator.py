@@ -2,7 +2,7 @@ from config import *
 from passenger import *
 from building import *
 from controller import *
-from statistics import *
+from stats import *
 from gui import *
 
 class Elevator:
@@ -34,7 +34,9 @@ class Elevator:
 
         self.move_to(trgt_floor)
 
-        if task["type"]=="pickup":
+        if task["type"]=="move":
+            self.move_to(task["floor"])
+        elif task["type"]=="pickup":
             self.pickup(task["person"], sim_time)
         elif task["type"]=="dropoff":
             self.dropoff(task["person"], sim_time)

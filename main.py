@@ -3,7 +3,7 @@ from passenger import *
 from building import *
 from elevator import *
 from controller import *
-from statistics import *
+from stats import *
 from gui import *
 from run import *
 

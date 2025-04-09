@@ -3,47 +3,74 @@ from config import MAX_CAPACITY
 class Controller:
     def __init__(self, elevators, board_rate = 3):
         self.elevators = elevators
-        self.pending_requests = []
         self.board_rate = board_rate
-        self.tasks_by_ele = {ele.id: [] for ele in self.elevators}
+        self.pending_requests = []
+        self.call_queue = []
+        self.pending_requests = []
+        self.tasks_by_ele = {ele.id: [] for ele in elevators}
     
     def request_pickup(self, person):
-        print(f"CONTROLLER: Received pickup request from floor {person.start_floor}")
+        direction = "UP" if person.dest_floor > person.start_floor else "DOWN"
+        request = (person.start_floor, direction)
+        if request not in self.call_queue:
+            self.call_queue.append(request)
         self.pending_requests.append(person)
-        self.assign_riders()
     
-    def assign_riders(self):
-        unassigned = []
-        for person in self.pending_requests:
-            best_ele = self.select_ele(person)
-            if best_ele:
-                best_ele.add_task({
-                    "type": "pickup",
-                    "floor": person.start_floor,
-                    "person": person
-                })
-                self.tasks_by_ele[best_ele.id].append({
-                    "type": "dropoff",
-                    "floor": person.dest_floor,
-                    "person": person
-                })
-            else:
-                unassigned.append(person)
+    def process(self):
+        self.assign_calls()
+        self.assign_people()
+    
+    def assign_calls(self):
+        if not self.call_queue:
+            return
         
-        self.pending_requests = unassigned
-        self.push_tasks_to_ele()
-    
-    def push_tasks_to_ele(self):
-        for ele in self.elevators:
-            ele.get_tasks(self.tasks_by_ele[ele.id])
+        request = self.call_queue.pop(0)
+        floor, direction = request
 
-    def select_ele(self, person):
-        if len(self.elevators) > 1:
-            available = [ele for ele in self.elevators if len(ele.riders) < MAX_CAPACITY]
-            if not available:
-                return None
-            return min(available, key=lambda ele: len(self.tasks_by_elevator[ele.id]))
-        return self.elevators[0] 
+        idle = [ele for ele in self.elevators if ele.state == "IDLE" and ele.direction == direction]
+        trgt = self.closest_ele(idle, floor)
+
+        if trgt:
+            self.tasks_by_ele[trgt.id].append({
+                "type": "move",
+                "floor": floor
+            })
+            trgt.get_tasks(self.tasks_by_ele[trgt.id])
+        
+        else:
+            return None # for now
+
+    def assign_people(self):
+        rem = []
+        for person in self.pending_requests:
+            assigned = False
+            for ele in self.elevators:
+                if ele.current_floor == person.start_floor and len(ele.riders) < MAX_CAPACITY:
+                    door_ops = self.board_rate
+                    self.tasks_by_ele[ele.id].append({
+                        "type": "pickup",
+                        "floor": person.start_floor,
+                        "person": person,
+                        "delay": door_ops
+                    })
+                    self.tasks_by_ele[ele.id].append({
+                        "type": "dropoff",
+                        "floor": person.dest_floor,
+                        "person": person
+                    })
+                    ele.get_tasks(self.tasks_by_ele[ele.id])
+                    assigned = True
+                    break
+            if not assigned:
+                rem.append(person)
+        self.pending_requests = rem
+
+    def closest_ele(self, elevators, floor):
+        if not elevators:
+            return None
+        return min(elevators, key=lambda ele: abs(ele.current_floor - floor))
+
+    
 
     
     

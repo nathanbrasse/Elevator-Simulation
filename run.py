@@ -3,7 +3,7 @@ from passenger import *
 from building import *
 from elevator import *
 from controller import *
-from statistics import Collect_Stats
+from stats import *
 from gui import *
 from main import default_move
 
@@ -26,6 +26,8 @@ class Sim:
                 person = Person(self.sim_time, start, dest)
                 self.controller.request_pickup(person)
                 self.next_passenger_time = self.sim_time + random.expovariate(1/PASSENGER_ITA)
+            
+            self.controller.process()
             
             for elevator in self.elevators:
                 elevator.step(self.sim_time)
