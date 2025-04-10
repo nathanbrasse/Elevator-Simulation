@@ -24,10 +24,7 @@ class Controller:
                 })
                 best_ele.get_tasks(self.tasks_by_ele[best_ele.id])
     
-
     def closest_ele(self, elevators, floor):
-        if not elevators:
-            return None
         return min(elevators, key=lambda ele: abs(ele.current_floor - floor))
 
     
