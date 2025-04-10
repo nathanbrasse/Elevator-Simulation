@@ -39,7 +39,6 @@ class ElevatorGUI:
                 text=(
                     f"Elevator {elevator.id} - State: {elevator.state}, "
                     f"Floor: {elevator.current_floor}, Riders: {len(elevator.riders)}, "
-                    f"Tasks: {len(elevator.tasks)}"
                 )
             )
 

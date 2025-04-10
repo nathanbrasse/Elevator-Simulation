@@ -15,7 +15,6 @@ class Elevator:
         self.direction = "UP"
         self.building = building
 
-
     def step(self, sim_time):
         # 1. Drop off
         exiting = [p for p in self.riders if p.dest_floor == self.current_floor]
@@ -29,7 +28,7 @@ class Elevator:
         boarded = False
         if open_slots > 0:
             new_riders = self.building.get_boarding_passengers(
-                self.current_floor, self.direction, open_slots
+                self.current_floor, self.direction
             )
             for person in new_riders:
                 person.pickup_time = sim_time

@@ -12,10 +12,18 @@ import random
 class Sim:
     def __init__(self, num_elevators = 1):
         self.sim_time = 0
-        self.elevators = [Elevator(id=1, move_strat=default_move) for i in range(num_elevators)]
-        self.controller = Controller(self.elevators)
         self.stats = Collect_Stats()
-        self.next_passenger_time = self.sim_time + random.expovariate(1/PASSENGER_ITA)
+        
+        self.elevators = []
+        self.controller = Controller(self.elevators)
+        self.building = Building(self.elevators, self.controller, self.stats)
+
+        self.elevators.extend([
+            Elevator(id=i + 1, move_strat=default_move, building=self.building)
+            for i in range(num_elevators)
+        ])
+
+        self.next_passenger_time = self.sim_time + random.expovariate(1 / PASSENGER_ITA)
 
     def step(self):
             self.sim_time += INTERVAL
@@ -26,9 +34,7 @@ class Sim:
                 person = Person(self.sim_time, start, dest)
                 self.building.add_waiting_passenger(person)
                 self.next_passenger_time = self.sim_time + random.expovariate(1/PASSENGER_ITA)
-            
-            self.controller.process()
-            
+                        
             for elevator in self.elevators:
                 elevator.step(self.sim_time)
             
