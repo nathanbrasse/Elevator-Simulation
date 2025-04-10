@@ -19,4 +19,3 @@ if __name__ == "__main__":
     #elevator = Elevator(id, move_strat=None)
     gui = ElevatorGUI(root, sim)
     root.mainloop()
-
