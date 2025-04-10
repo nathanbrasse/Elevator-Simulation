@@ -83,7 +83,7 @@ class PersonSpawner:
             plt.legend()
             plt.grid(True)
             plt.tight_layout()
-            plt.show()
+            #plt.show()
 
     def plot_simulated_vs_actual(self):
         for col in self.floor_cols:
@@ -100,7 +100,7 @@ class PersonSpawner:
             plt.legend()
             plt.grid(True)
             plt.tight_layout()
-            plt.show()
+            #plt.show()
 
 
 spawner = PersonSpawner("C:/Users/natha/Downloads/OnCounts.xlsx", "C:/Users/natha/Downloads/OffCounts.xlsx")

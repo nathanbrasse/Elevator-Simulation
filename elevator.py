@@ -6,10 +6,11 @@ from stats import *
 from gui import *
 
 class Elevator:
-    def __init__(self, id, move_strat, building):
+    def __init__(self, id, move_strat, building, stats):
         self.id = id
         self.move_strat = move_strat
         self.building = building
+        self.stats = stats
         
         self.current_floor = 0
 
@@ -24,6 +25,7 @@ class Elevator:
         for person in exiting:
             person.dropoff_time = sim_time
             self.riders.remove(person)
+            self.stats.track_dropoff(person)
             print(f"ELEVATOR {self.id} DROPOFF: Person {person.id} dropped off at floor {self.current_floor}")
 
         open_slots = MAX_CAPACITY - len(self.riders)
@@ -33,6 +35,7 @@ class Elevator:
             for person in new_riders:
                 person.pickup_time = sim_time
                 self.riders.append(person)
+                self.stats.track_pickup(person)
                 print(f"ELEVATOR {self.id} PICKUP: Person {person.id} from {person.start_floor} to {person.dest_floor}")
                 boarded = True
 

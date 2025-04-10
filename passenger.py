@@ -14,4 +14,8 @@ class Person:
 
         print(f"PERSON SPAWN: Person created at floor {start} -> {dest}")
     
-    
+    def wait_time(self):
+        return (self.pickup_time - self.spawn_time) if hasattr(self, "pickup_time") else None
+
+    def trvl_time(self):
+        return (self.dropoff_time - self.spawn_time) if hasattr(self, "dropoff_time") else None

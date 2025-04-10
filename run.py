@@ -20,7 +20,7 @@ class Sim:
         self.building = Building(self.elevators, self.controller, self.stats)
 
         self.elevators.extend([
-            Elevator(id=i + 1, move_strat=default_move, building=self.building)
+            Elevator(id=i + 1, move_strat=default_move, building=self.building, stats=self.stats)
             for i in range(num_elevators)
         ])
 
@@ -45,6 +45,7 @@ class Sim:
             for person_info in people:
                 person = Person(self.sim_time, person_info['start_floor'], person_info['dest_floor'])
                 self.building.add_waiting_passenger(person)
+                self.stats.track_spawn(person)
             self.timestep+=1
 
                     
