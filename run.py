@@ -24,7 +24,7 @@ class Sim:
                 start, dest = random.randint(0,FLOORS-1), random.randint(0,FLOORS-1)
                 while dest == start:dest = random.randint(0,FLOORS-1)
                 person = Person(self.sim_time, start, dest)
-                self.controller.request_pickup(person)
+                self.building.add_waiting_passenger(person)
                 self.next_passenger_time = self.sim_time + random.expovariate(1/PASSENGER_ITA)
             
             self.controller.process()
