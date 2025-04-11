@@ -26,7 +26,7 @@ class Sim:
 
         self.next_passenger_time = self.sim_time + random.expovariate(1 / PASSENGER_ITA)
 
-        self.spawner = PersonSpawner("C:/Users/natha/Downloads/OnCounts.xlsx", "C:/Users/natha/Downloads/OffCounts.xlsx")
+        self.spawner = PersonSpawner("C:/Users/natha/Downloads/OnCounts.xlsx", "C:/Users/natha/Downloads/OffCounts.xlsx", scale=0.02)
         self.timestep = 0
 
     def step(self):
@@ -40,8 +40,9 @@ class Sim:
             self.building.add_waiting_passenger(person)
             self.next_passenger_time = self.sim_time + random.expovariate(1/PASSENGER_ITA)"""
         
-        if self.timestep < self.spawner.num_timesteps:
-            people = self.spawner.spawn_multiple(self.timestep)
+        data_index = int(self.sim_time // 15)
+        if data_index < self.spawner.num_timesteps:
+            people = self.spawner.spawn_multiple(data_index)
             for person_info in people:
                 person = Person(self.sim_time, person_info['start_floor'], person_info['dest_floor'])
                 self.building.add_waiting_passenger(person)

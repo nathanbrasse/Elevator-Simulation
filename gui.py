@@ -1,12 +1,14 @@
 from passenger import *
 from controller import *
 from config import *
+from stats import *
 
 import tkinter as tk
 
 class ElevatorGUI:
     def __init__(self, root, run):
         self.root = root
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.sim = run
         self.canvas_width = 200
         self.canvas_height = 400
@@ -28,6 +30,14 @@ class ElevatorGUI:
 
         self.update_gui()
 
+    def on_close(self):
+        # Print stats before window closes
+        if self.sim:
+            print("Simulation manually stopped.")
+            self.sim.stats.report()
+        self.root.destroy()
+
+
     def update_gui(self):
         sim_continues = self.sim.step()
 
@@ -44,10 +54,13 @@ class ElevatorGUI:
 
         self.draw_shaft()
 
-        if sim_continues:
+        self.root.after(500, self.update_gui)
+
+        """if sim_continues:
             self.root.after(500, self.update_gui)
         else:
-            print("Simulation complete.")
+            print("Simulation complete.")"""
+
 
     def draw_shaft(self):
         self.canvas.delete("all")

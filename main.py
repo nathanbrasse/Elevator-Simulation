@@ -20,8 +20,3 @@ if __name__ == "__main__":
     gui = ElevatorGUI(root, sim)
     root.mainloop()
 
-    try:
-        while sim.step():
-            pass
-    finally:
-        sim.stats.report()
