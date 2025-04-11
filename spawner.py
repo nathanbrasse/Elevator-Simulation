@@ -3,10 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class PersonSpawner:
-    def __init__(self, on_file, off_file, scale):
+    def __init__(self, on_file, off_file):
         self.on_df = pd.read_excel(on_file, sheet_name='Sheet1')
         self.off_df = pd.read_excel(off_file, sheet_name='Sheet1')
-        self.scale = scale
 
         self.floor_cols = [0, '1', '2', '3', '4']
 
@@ -66,7 +65,7 @@ class PersonSpawner:
         if timestep >= self.num_timesteps:
             raise IndexError("Timestep out of range")
 
-        total_to_spawn = int(self.on_df.loc[timestep, self.floor_cols].sum() * self.scale)
+        total_to_spawn = int(self.on_df.loc[timestep, self.floor_cols].sum())
         people = []
         for _ in range(total_to_spawn):
             person = self.sample_person(timestep)
@@ -105,7 +104,7 @@ class PersonSpawner:
             #plt.show()
 
 
-spawner = PersonSpawner("C:/Users/natha/Downloads/OnCounts.xlsx", "C:/Users/natha/Downloads/OffCounts.xlsx", scale=0.02)
+spawner = PersonSpawner("C:/Users/natha/Downloads/OnCounts.xlsx", "C:/Users/natha/Downloads/OffCounts.xlsx")
 
 # Simulate over all timesteps
 for t in range(spawner.num_timesteps):
