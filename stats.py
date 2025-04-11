@@ -32,11 +32,9 @@ class Collect_Stats:
 
         if self.wait_times:
             print(f"avg wait time: {stats.mean(self.wait_times)} minutes")
-            print(f"max wait time: {max(self.wait_times)} minutes")
         
         if self.trvl_times:
             print(f"avg trvl times: {stats.mean(self.trvl_times)} minutes")
-            print(f"max trvl time: {max(self.trvl_times)} minutes")
     
     def reset(self):
         self.__init__()
