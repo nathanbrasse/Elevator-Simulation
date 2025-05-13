@@ -16,7 +16,6 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.title("Elevator Simulation")
     sim = Sim(num_elevators=3)
-    #elevator = Elevator(id, move_strat=None)
     gui = ElevatorGUI(root, sim)
     root.mainloop()
 

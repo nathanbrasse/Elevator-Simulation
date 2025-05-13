@@ -12,6 +12,8 @@ class Collect_Stats:
         self.wait_times = []
         self.trvl_times = []
         self.passenger_log = []
+        
+        self.delivered = 0
 
     def track_spawn(self, person):
         self.passenger_log.append(person)
@@ -25,6 +27,7 @@ class Collect_Stats:
         trvl = person.trvl_time()
         if trvl is not None:
             self.trvl_times.append(trvl)
+        self.delivered+=1
     
     def report(self):
         print(f"SIM REPORT")
@@ -35,6 +38,10 @@ class Collect_Stats:
         
         if self.trvl_times:
             print(f"avg trvl times: {stats.mean(self.trvl_times)} seconds")
+    
+    @property
+    def passengers_delivered(self):
+        return self.delivered
     
     def reset(self):
         self.__init__()
