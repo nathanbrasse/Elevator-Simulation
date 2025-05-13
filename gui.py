@@ -19,7 +19,7 @@ class ElevatorGUI:
 
         style = ttk.Style()
         style.theme_use("clam")
-        style.configure("TLabel", background="#1e1e2f", foreground="white", font=("Consolas", 12))
+        style.configure("TLabel", background="#1e1e2f", foreground="white", font=("Arial", 12))
         style.configure("TFrame", background="#1e1e2f")
 
         self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg="white", highlightthickness=0)
