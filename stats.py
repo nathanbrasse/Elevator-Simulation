@@ -31,10 +31,10 @@ class Collect_Stats:
         print(f"total passengers: {len(self.passenger_log)}")
 
         if self.wait_times:
-            print(f"avg wait time: {stats.mean(self.wait_times)} minutes")
+            print(f"avg wait time: {stats.mean(self.wait_times)} seconds")
         
         if self.trvl_times:
-            print(f"avg trvl times: {stats.mean(self.trvl_times)} minutes")
+            print(f"avg trvl times: {stats.mean(self.trvl_times)} seconds")
     
     def reset(self):
         self.__init__()
