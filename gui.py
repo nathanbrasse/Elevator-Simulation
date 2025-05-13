@@ -8,7 +8,7 @@ from stats import *
 class ElevatorGUI:
     def __init__(self, root, run):
         self.root = root
-        self.root.title("🚀 Epic Elevator Simulator")
+        self.root.title("Elevator Simulator")
         self.root.configure(bg="#1e1e2f")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
@@ -91,4 +91,4 @@ class ElevatorGUI:
 
             self.canvas.create_rectangle(x_offset, elev_top, x_offset + 50, elev_bottom, fill=color, outline="white")
             self.canvas.create_text(x_offset + 25, (elev_top + elev_bottom) / 2, text=str(len(elevator.riders)),
-                                    fill="white", font=("Consolas", 14, "bold"))
+                                    fill="white", font=("Arial", 14, "bold"))
