@@ -27,7 +27,7 @@ The simulation shows that four elevators seem perfectly adequate to handle the t
 - Elevators travel at a fixed speed of 1 minute per floor, inclusive of door operations and passenger transfers.
 
 ### Design Decisions
-Discrete event simulation's efficiency and scalability was useful for running multiple scenarios and allowed me to model elevator movement, passenger arrival, queuing and service times in a time-accurate and computationally efficient manner. It also made possible the ability to stress test the system using higher traffic volumes and lower elevator counts. The markov modelling required to do this would not be possible also without discrete event's cleaner integration of such stochastic process. 
+Discrete event simulation's efficiency and scalability was useful for running multiple scenarios and allowed me to model elevator movement, passenger arrival, queuing and service times in a time-accurate and computationally efficient manner. It also made possible the ability to stress test the system using higher traffic volumes and lower elevator counts.
 
 ### Known Limitations
 - Elevator times are constant, no "manual" override for a passenger inside the elevator
