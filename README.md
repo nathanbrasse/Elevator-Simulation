@@ -1,7 +1,7 @@
 ## 📕Elevator Simulation
 
 ### Purpose
-**"How many elevators ensures consistently low wait times for users across the day under varying traffic conditions?"** <br />
+*"How many elevators ensures consistently low wait times for users across the day under varying traffic conditions?"* <br />
 
 A simulation based analysis to determine the optimal number of elevator for a 5-floor commercial building, focusing on minimizing wait time using real world traffic data. This project reflects real world skills in systems simulation, queue modeling, load balancing and interpreting time based performance data. <br />
 
@@ -27,7 +27,7 @@ The simulation shows that four elevators seem perfectly adequate to handle the t
 - Elevators travel at a fixed speed of 1 minute per floor, inclusive of door operations and passenger transfers.
 
 ### Design Decisions
-Discrete event simulation's efficiency and scalability was useful for running multiple scenarios and allowed me to model elevator movement, passenger arrival, queuing and service times in a time-accurate and computationally efficient manner. It also made possible the ability to stress test the system using higher traffic volumes and lower elevator counts.
+Discrete event simulation was a good fit because it's both efficient and scalable. It enabled accurate modeling of elevator movement, passenger arrivals, queuing, and service times with minimal computational utility. This approach also made it possible to test various scenarios, including high traffic conditions and reduced elevator counts, to evaluate the system's performance under high stress situations. 
 
 ### Known Limitations
 - Elevator times are constant, no "manual" override for a passenger inside the elevator
