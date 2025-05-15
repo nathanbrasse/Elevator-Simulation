@@ -129,12 +129,12 @@ trans_matrix = {
     '4': {'0': 0.360779, '1': 0.580906, '2': 0.024609, '3': 0.033705}
 }
 
-spawner = PersonSpawner("C:/Users/natha/Downloads/OnCounts.xlsx", "C:/Users/natha/Downloads/OffCounts.xlsx", trans_matrix=trans_matrix, use_markov=True, scale_factor=1)
+spawner = PersonSpawner("~/Downloads/OnCounts.xlsx", "~/Downloads/OffCounts.xlsx", trans_matrix=trans_matrix, use_markov=True, scale_factor=1)
 
 for t in range(spawner.num_timesteps):
     person = spawner.spawn_multiple(t)
     # Print to see results
-    #if person:
-        #print(f"Timestep {t}: {person}")
+    if person:
+        print(f"Timestep {t}: {person}")
 
 #spawner.plot_simulated_vs_actual()
