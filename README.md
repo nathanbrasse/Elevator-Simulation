@@ -23,11 +23,13 @@ The simulation shows that four elevators seem perfectly adequate to handle the t
 - Each elevator operates independently, moving between floors based on its request queue (provided by the controller). At each stop, passengers automatically board or disembark based on current floor match.  
 
 ### Assumptions
-- People arrive according to provided traffic data which was modelled to generate a distribution that can be scaled up or down using markov transformation techniques. Markov enables time-dependent transitions that better reflect peak and off-peak transitions and periodic patterns that resemble the real world. 
+- Passenger arrivals were based on provided traffic data, which was modeled into a distribution using Markov transition techniques. 
 - Elevators travel at a fixed speed of 1 minute per floor, inclusive of door operations and passenger transfers.
 
 ### Design Decisions
 Discrete event simulation was a good fit because it's both efficient and scalable. It enabled accurate modeling of elevator movement, passenger arrivals, queuing, and service times with minimal computational utility. This approach also made it possible to test various scenarios, including high traffic conditions and reduced elevator counts, to evaluate the system's performance under high stress situations. 
+
+Since the data used for passenger arrivals and departures represented a typical day, additional attention was given to ensuring that the fitted distribution allowed for realistic variability in both timing and volume of arrivals and departures. A Markov based approach enables time dependent transitions between traffic levels, capturing the periodic patterns in real world situations such as the morning rush, midday spike, and afternoon exits. This method also provided flexibility to simulate alternative conditions, such as increased weekend traffic or reduced weekday demand, by probabilistically generating plausible variations rooted in the original data. 
 
 ### Known Limitations
 - Elevator times are constant, no "manual" override for a passenger inside the elevator
