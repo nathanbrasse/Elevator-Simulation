@@ -75,7 +75,7 @@ class ElevatorGUI:
                 text=label.upper(), fill="#F9FAFB", font=("Helvetica", 20, "bold"))
 
         if hasattr(self.sim.building, "wait_queues"):
-            for floor, people in self.sim.building.wait_queues.items():
+            for floor, people in self.sim.building.wait_queue.items():
                 y = self.canvas_height - floor * self.floor_height - self.floor_height / 2
                 for idx, _ in enumerate(people):
                     x = 10 + idx * 12
