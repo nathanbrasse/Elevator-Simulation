@@ -7,7 +7,6 @@ class Controller:
         self.board_rate = board_rate
         self.pending_requests = []
         self.call_queue = []
-        self.pending_requests = []
         self.tasks_by_ele = {ele.id: [] for ele in elevators}
     
     
@@ -24,8 +23,8 @@ class Controller:
                 })
                 best_ele.get_tasks(self.tasks_by_ele[best_ele.id])
     
-    def closest_ele(self, elevators, floor):
-        return min(elevators, key=lambda ele: abs(ele.current_floor - floor))
+    def closest_ele(self, floor):
+        return min(self.elevators, key=lambda ele: abs(ele.current_floor - floor))
 
     
 
