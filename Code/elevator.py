@@ -40,24 +40,38 @@ class Elevator:
                 print(f"ELEVATOR {self.id} PICKUP: Person {person.id} from {person.start_floor} to {person.dest_floor}")
                 boarded = True
 
-        if not exiting and not boarded:
-            self.move()
+        self.tasks[:] = [t for t in self.tasks if t["floor"] != self.current_floor]
+        self.move()
 
     def move(self):
-        if self.direction == "UP":
-            if self.current_floor < FLOORS - 1:
-                self.current_floor += 1
-            else:
-                self.direction = "DOWN"
-                self.current_floor -= 1
-        else:
-            if self.current_floor > 0:
-                self.current_floor -= 1
-            else:
-                self.direction = "UP"
-                self.current_floor += 1
+        if not self.tasks and not self.riders:
+            self.state = "IDLE"
+            return
 
-        print(f"ELEVATOR {self.id} moving {self.direction} to floor {self.current_floor}")
+        # Decide target floor: serve riders first, then pending pickups
+        if self.riders:
+            target = min(
+                (p.dest_floor for p in self.riders),
+                key=lambda f: abs(f - self.current_floor),
+            )
+        else:
+            target = min(
+                (t["floor"] for t in self.tasks),
+                key=lambda f: abs(f - self.current_floor),
+            )
+
+        if target == self.current_floor:
+            return
+
+        if target > self.current_floor:
+            self.direction = "UP"
+            self.current_floor += 1
+        else:
+            self.direction = "DOWN"
+            self.current_floor -= 1
+
+        self.state = "MOVING"
+        print(f"ELEVATOR {self.id} moving {self.direction} to floor {self.current_floor} (target {target})")
 
     def get_tasks(self, tasks):
         self.tasks = tasks
