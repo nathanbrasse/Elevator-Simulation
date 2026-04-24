@@ -26,7 +26,7 @@ class Sim:
 
         self.next_passenger_time = self.sim_time + random.expovariate(1 / PASSENGER_ITA)
 
-        self.spawner = PersonSpawner("C:/Users/natha/Downloads/OnCounts.xlsx", "C:/Users/natha/Downloads/OffCounts.xlsx")
+        self.spawner = PersonSpawner(synthetic=True)
         self.timestep = 0
 
     def step(self):

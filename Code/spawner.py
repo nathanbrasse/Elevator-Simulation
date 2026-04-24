@@ -3,22 +3,48 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class PersonSpawner:
-    def __init__(self, on_file, off_file, trans_matrix = None, use_markov=False, scale_factor=1):
-        self.on_df = pd.read_excel(on_file, sheet_name='Sheet1')
-        self.off_df = pd.read_excel(off_file, sheet_name='Sheet1')
-        self.scale_factor = scale_factor
+    def __init__(
+            self,
+            on_file=None,
+            off_file=None,
+            trans_matrix=None,
+            use_markov=False,
+            scale_factor=1,
+            synthetic=False,
+            num_floors=5,
+            avg_arrivals_per_timestep=3,
+            num_timesteps=96,
+        ):
 
-        self.floor_cols = [0, '1', '2', '3', '4']
+            self.synthetic = synthetic
+            self.scale_factor = scale_factor
+            self.use_markov = use_markov
+            self.trans_matrix = trans_matrix
+            self.floor_cols = list(range(num_floors))
 
-        self.on_probs_by_time = self._normalize_timestep_probs(self.on_df, self.floor_cols)
-        self.off_probs_by_time = self._normalize_timestep_probs(self.off_df, self.floor_cols)
+            if synthetic:
+                # No files needed. Set up a uniform random generator.
+                self.num_timesteps = num_timesteps
+                self.avg_arrivals = avg_arrivals_per_timestep
+                self.num_floors = num_floors
+                self.on_probs_by_time = None
+                self.off_probs_by_time = None
+            else:
+                if on_file is None or off_file is None:
+                    raise ValueError(
+                        "on_file and off_file are required when synthetic=False"
+                    )
+                self.on_df = pd.read_excel(on_file, sheet_name='Sheet1')
+                self.off_df = pd.read_excel(off_file, sheet_name='Sheet1')
+                excel_cols = [0, '1', '2', '3', '4']
+                self.on_probs_by_time = self._normalize_timestep_probs(self.on_df, excel_cols)
+                self.off_probs_by_time = self._normalize_timestep_probs(self.off_df, excel_cols)
+                self.num_timesteps = len(self.on_probs_by_time)
 
-        self.num_timesteps = len(self.on_probs_by_time)
-        self.simulated_counts = {int(c): [0] * self.num_timesteps for c in self.floor_cols}
-
-        self.use_markov = use_markov
-        self.trans_matrix = trans_matrix
-
+            self.simulated_counts = {
+                int(c): [0] * self.num_timesteps for c in self.floor_cols
+            }
+    
     def _normalize_timestep_probs(self, df, cols):
         timestep_probs = []
         for _, row in df[cols].iterrows():
@@ -34,6 +60,18 @@ class PersonSpawner:
     def sample_person(self, timestep):
         if timestep >= self.num_timesteps:
             raise IndexError("Timestep out of range")
+        
+        if self.synthetic:
+            start_floor = np.random.randint(0, self.num_floors)
+            dest_floor = np.random.randint(0, self.num_floors)
+            while dest_floor == start_floor:
+                dest_floor = np.random.randint(0, self.num_floors)
+            self.simulated_counts[start_floor][timestep] += 1
+            return {
+                "start_floor": int(start_floor),
+                "dest_floor": int(dest_floor),
+                "direction": "UP" if dest_floor > start_floor else "DOWN",
+            }
 
         on_probs = self.on_probs_by_time[timestep]
         off_probs = self.off_probs_by_time[timestep]
@@ -83,7 +121,12 @@ class PersonSpawner:
         if timestep >= self.num_timesteps:
             raise IndexError("Timestep out of range")
         
-        total_to_spawn = int(self.on_df.loc[timestep, self.floor_cols].sum() * self.scale_factor)
+        if self.synthetic:
+            # Poisson arrivals around the configured mean
+            total_to_spawn = np.random.poisson(self.avg_arrivals)
+        else:
+            total_to_spawn = int(self.on_df.loc[timestep, self.floor_cols].sum() * self.scale_factor)
+
         people = []
         for _ in range(total_to_spawn):
             person = self.sample_person(timestep)
@@ -129,12 +172,15 @@ trans_matrix = {
     '4': {'0': 0.360779, '1': 0.580906, '2': 0.024609, '3': 0.033705}
 }
 
-spawner = PersonSpawner("~/Downloads/OnCounts.xlsx", "~/Downloads/OffCounts.xlsx", trans_matrix=trans_matrix, use_markov=True, scale_factor=1)
+if __name__=="__main__":
+    """spawner = PersonSpawner("~/Downloads/OnCounts.xlsx", "~/Downloads/OffCounts.xlsx", trans_matrix=trans_matrix, use_markov=True, scale_factor=1)
 
-for t in range(spawner.num_timesteps):
-    person = spawner.spawn_multiple(t)
-    # Print to see results
-    if person:
-        print(f"Timestep {t}: {person}")
+    for t in range(spawner.num_timesteps):
+        person = spawner.spawn_multiple(t)
+        # Print to see results
+        if person:
+            print(f"Timestep {t}: {person}")"""
+    s = PersonSpawner(synthetic=True)
+    print(s.spawn_multiple(0))
 
 #spawner.plot_simulated_vs_actual()
