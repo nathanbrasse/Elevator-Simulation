@@ -1,5 +1,6 @@
 from config import MAX_CAPACITY
 from building import *
+from collections import defaultdict
 
 class Controller:
     def __init__(self, elevators, board_rate = 3):
@@ -7,7 +8,8 @@ class Controller:
         self.board_rate = board_rate
         self.pending_requests = []
         self.call_queue = []
-        self.tasks_by_ele = {ele.id: [] for ele in elevators}
+        self.tasks_by_ele = defaultdict(list)
+        self.tasks = []
     
     
     def assign_passengers(self, building):
@@ -22,9 +24,13 @@ class Controller:
                     "floor": floor
                 })
                 best_ele.get_tasks(self.tasks_by_ele[best_ele.id])
+        print(f"TASKS: {[(eid, len(tasks)) for eid, tasks in self.tasks_by_ele.items()]}")
     
     def closest_ele(self, floor):
         return min(self.elevators, key=lambda ele: abs(ele.current_floor - floor))
+    
+    def get_tasks(self, tasks):
+        self.tasks = tasks
 
     
 

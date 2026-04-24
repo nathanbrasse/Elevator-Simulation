@@ -180,7 +180,5 @@ if __name__=="__main__":
         # Print to see results
         if person:
             print(f"Timestep {t}: {person}")"""
-    s = PersonSpawner(synthetic=True)
-    print(s.spawn_multiple(0))
 
 #spawner.plot_simulated_vs_actual()

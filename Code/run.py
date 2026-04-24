@@ -31,14 +31,6 @@ class Sim:
 
     def step(self):
         self.sim_time += INTERVAL
-
-        """if self.sim_time >= self.next_passenger_time:
-            #start, dest = random.randint(0,FLOORS-1), random.randint(0,FLOORS-1)
-            #while dest == start:dest = random.randint(0,FLOORS-1)
-            person_info = self.spawner.sample_person(timestep)
-            person = Person(self.sim_time, start, dest)
-            self.building.add_waiting_passenger(person)
-            self.next_passenger_time = self.sim_time + random.expovariate(1/PASSENGER_ITA)"""
         
         data_index = int(self.sim_time // 15)
         if self.sim_time % 15 == 0 and data_index < self.spawner.num_timesteps:
@@ -49,7 +41,8 @@ class Sim:
                 self.stats.track_spawn(person)
             self.timestep+=1
 
-                    
+        self.controller.assign_passengers(self.building)
+
         for elevator in self.elevators:
             elevator.step(self.sim_time)
         

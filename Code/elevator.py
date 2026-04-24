@@ -18,6 +18,7 @@ class Elevator:
         self.direction = "UP"
 
         self.riders = []
+        self.tasks = []
 
     def step(self, sim_time):
 
@@ -57,6 +58,9 @@ class Elevator:
                 self.current_floor += 1
 
         print(f"ELEVATOR {self.id} moving {self.direction} to floor {self.current_floor}")
+
+    def get_tasks(self, tasks):
+        self.tasks = tasks
 
 
 
